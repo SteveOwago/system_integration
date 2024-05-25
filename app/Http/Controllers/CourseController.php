@@ -34,6 +34,9 @@ class CourseController extends Controller
         if (session('info')) {
             Alert::info('Course Enrolled', session('info'));
         }
+        if (session('error')) {
+            Alert::info('Error', session('error'));
+        }
         $course = Course::findOrFail($id);
 
         return view('courses.show', compact('course'));
@@ -77,6 +80,6 @@ class CourseController extends Controller
         //Initiate Mpesa Push through Service
         $mpesaService->stkPush($phone, $user, $course);
 
-        return back()->with('success', 'Complete Payment on Your Phone Number');
+        return back();
     }
 }

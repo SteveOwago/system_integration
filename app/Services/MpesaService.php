@@ -59,10 +59,10 @@ class MpesaService
                 'PartyA'                 => $phone,
                 'PartyB'                 => $shortCode,
                 'PhoneNumber'            => $phone,
-                //'CallBackURL'            => route('courses.stk.callback.43054384'),
-                'CallBackURL'            => "https://takemyitclass.com",
+                'CallBackURL'            => route('courses.stk.callback.43054384'),
+                //'CallBackURL'            => "https://takemyitclass.com",
                 'AccountReference'       => 'Moringa School Course Enrollment',
-                'TransactionDesc'        => 'Payment For ' . $course->name
+                'TransactionDesc'        => 'Payment For Enrollment: '.$course->name
 
             ];
             $data_string = json_encode($curl_post_data);
@@ -74,6 +74,7 @@ class MpesaService
             $curl_res = curl_exec($ch);
             $result = json_decode((string) $curl_res, true);
             info("End Point Hit STK");
+            info($result);
             $mpesa_stk = MpesaStk::create([
                 "merchant_request_id" => $result["MerchantRequestID"],
                 "checkout_request_id" => $result["CheckoutRequestID"],
@@ -86,7 +87,7 @@ class MpesaService
             return back()->with('success', 'Please Complete Transaction In the Phone Number Provided');
         } catch (\Throwable $th) {
             info($th->getMessage());
-            return back()->with('error', 'Failed! ' . $th->getMessage());
+            return back()->with('error', 'Failed! Try Again After 5 minutes or Contact the School for help' );
         }
     }
 }

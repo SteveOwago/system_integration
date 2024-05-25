@@ -53,7 +53,7 @@
                                                     <div class="form-group text-center">
                                                         <label for="">Enter Mpesa Phone Number</label>
                                                         <input class="form-control" type="number" name="phone"
-                                                            placeholder="07XXXXXXXX">
+                                                            placeholder="07XXXXXXXX" required minlength="10">
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
