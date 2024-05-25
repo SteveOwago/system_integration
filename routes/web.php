@@ -21,6 +21,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('users',UserController::class);
-Route::resource('courses',CourseController::class);
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('users', UserController::class);
+    Route::post('courses/payment/{course_id}', [CourseController::class, 'payment'])->name('courses.payment');
+    Route::post('courses/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+    Route::resource('courses', CourseController::class);
+});

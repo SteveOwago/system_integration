@@ -26,7 +26,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $user)
+                                @foreach ($students as $user)
                                     <tr>
                                         <td>
                                             <div class="d-flex px-2 py-1">
@@ -41,7 +41,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">Career</p>
+                                            <p class="text-xs font-weight-bold mb-0">Courses</p>
                                             <p class="text-xs text-secondary mb-0">{{$user->designation ?? "No name"}}</p>
                                         </td>
                                         <td class="align-middle text-center text-sm">

@@ -45,7 +45,7 @@
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             @yield('content')
-            @include('partials.footer')
+            {{-- @include('partials.footer') --}}
         </div>
     </main>
 
