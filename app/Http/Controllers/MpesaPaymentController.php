@@ -45,7 +45,7 @@ class MpesaPaymentController extends Controller
                 }
             }
         } else {
-            info("Failed Transaction!")
+            info("Failed Transaction!");
         }
 
     }
