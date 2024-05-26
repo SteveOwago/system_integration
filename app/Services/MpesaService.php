@@ -16,7 +16,6 @@ class MpesaService
         $amount = Course::where('id', $course->id)->first()->value('price');
         $amountPay = number_format($amount, 0);
         $phone = '254' . substr($phone, -9, 9);
-
         try {
             $environment = "sandbox";
             if (env("MPESA_ENVIRONMENT") == 'live') {
@@ -25,9 +24,6 @@ class MpesaService
             if ($environment == "sandbox") {
                 $amountPay = 1;
             }
-
-
-
             $auth_url = 'https://' . $environment . '.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'; //replace sandbox with api for live
             $stk_push_url = 'https://' . $environment . '.safaricom.co.ke/mpesa/stkpush/v1/processrequest'; //replace sandbox with api for live
             $consumer_key = env("MPESA_CONSUMER_KEY");
@@ -82,7 +78,6 @@ class MpesaService
                 "user_id" => $user->id,
                 "status" => '0',
             ]);
-
 
             return back()->with('success', 'Please Complete Transaction In the Phone Number Provided');
         } catch (\Throwable $th) {
