@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5817a978bb90527cd644bbb7dc096b26",
+    "content-hash": "c5bd584311753ed63cd543a1010f4dfb",
     "packages": [
         {
             "name": "brick/math",
@@ -6106,6 +6106,78 @@
                 }
             ],
             "time": "2023-11-03T12:00:00+00:00"
+        },
+        {
+            "name": "graham-campbell/testbench-core",
+            "version": "v4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GrahamCampbell/Laravel-TestBench-Core.git",
+                "reference": "161456c4f34877f81d8f9855010617d5ae625129"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-TestBench-Core/zipball/161456c4f34877f81d8f9855010617d5ae625129",
+                "reference": "161456c4f34877f81d8f9855010617d5ae625129",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4.15 || ^8.0.2",
+                "symfony/polyfill-php80": "^1.26"
+            },
+            "require-dev": {
+                "graham-campbell/analyzer": "^4.1",
+                "phpunit/phpunit": "^9.5 || ^10.1"
+            },
+            "suggest": {
+                "illuminate/support": "Required to use the laravel trait.",
+                "mockery/mockery": "Required to use the mockery trait.",
+                "phpunit/phpunit": "Required to use the most of the features."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GrahamCampbell\\TestBenchCore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                }
+            ],
+            "description": "TestBench Core Provides Some Testing Functionality For Laravel",
+            "keywords": [
+                "Graham Campbell",
+                "GrahamCampbell",
+                "Laravel TestBench Core",
+                "Laravel-TestBench-Core",
+                "TestBench",
+                "framework",
+                "laravel",
+                "testbench-core",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/GrahamCampbell/Laravel-TestBench-Core/issues",
+                "source": "https://github.com/GrahamCampbell/Laravel-TestBench-Core/tree/v4.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/graham-campbell/testbench-core",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-12-03T15:24:10+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",

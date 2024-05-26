@@ -79,7 +79,7 @@ class SalesforceService
         } else {
             // Handle the response as needed
             info('SalesForce Post Data Response: ') . $response;
-
+            return $response;
         }
         // Close the cURL session
         curl_close($ch);

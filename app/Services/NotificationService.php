@@ -17,8 +17,8 @@ class NotificationService
     {
         //Send Via Email
         $course = Course::where('id', $data['course_id'])->first()->value('name');
-        $user = User::where('id', $data['user_id'])->first();;
-        $mpesaRef = $data['mpesa_reference_number'];
+        $user = User::where('id', $data['user_id'])->first();
+        $mpesaRef = $data['mpesa_receipt_number'];
         $amount = $data['amount'];
         $message = "Hello $user->name
                     Payment Successful! Your Payment of $amount to Enroll for $course have been received successfully.

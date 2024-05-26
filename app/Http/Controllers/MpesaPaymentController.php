@@ -27,7 +27,7 @@ class MpesaPaymentController extends Controller
             $phone_number = $payload->Body->stkCallback->CallbackMetadata->Item[4]->Value;
             if ($amount > 0) {
                 $mpesa_stk =MpesaStk::where('merchant_request_id', $merchant_request_id)->where('checkout_request_id',$checkout_request_id)->first();
-                $courseID = $mpesa_stk->order_id;
+                $courseID = $mpesa_stk->course_id;
                 $userID = $mpesa_stk->user_id;
                 $data = [
                     'amount' => $amount,
