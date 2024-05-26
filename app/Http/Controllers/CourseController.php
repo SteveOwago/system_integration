@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseUser;
 use App\Services\MpesaService;
+use App\Services\SalesforceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -53,14 +55,31 @@ class CourseController extends Controller
             return redirect()->route('courses.show', $course->id)->with('info', 'You already enrolled to ' . $course->name);
         }
         //Save Enrollment Data
-        // Save to Student Portal
+        try {
+            // Start the transaction
+            DB::beginTransaction();
 
-        $courseUser = CourseUser::create([
-            'user_id' => $userID,
-            'course_id' => $courseID,
-        ]);
+            // Save to Student Portal
+            $courseUser = CourseUser::create([
+                'user_id' => $userID,
+                'course_id' => $courseID,
+            ]);
+            $data = [
+                'user_id' => $userID,
+                'course_id' => $courseID,
+                'amount' => $course->price,
+            ];
 
-        //Save student Data to SalesForce
+            //Save student Data to SalesForce
+            $salesforceService = new SalesforceService();
+            $salesforceService->postCourseData($data);
+            // Commit the transaction
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            //Log Errors In saving Data
+            info("Error Saving Course Data: ".$th->getMessage());
+        }
 
 
         return redirect()->route('courses.show', $courseUser->course_id)->with('success', 'You have Successfully enrolled to ' . $course->name);

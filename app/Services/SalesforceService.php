@@ -3,25 +3,25 @@
 namespace App\Services;
 
 /**
- * Class MicrosoftDynamicsService.
+ * Class SalesforceService.
  */
-class MicrosoftDynamicsService
+class SalesforceService
 {
-    public $tenant_id, $company_id, $access_token,$environment,$client_id,$client_secret;
+    public $access_token, $environment, $client_id, $client_secret, $login_url;
+
     public function __construct()
     {
-        $this->tenant_id = env('BC_TENANT_ID');
-        $this->company_id = env('BC_COMPANY');
-        $this->client_id = env('BC_CLIENT_ID');
-        $this->client_secret = env('BC_CLIENT_SECRET');
+        $this->client_id = env('SALESFORCE_CLIENT_ID');
+        $this->client_secret = env('SALESFORCE_CLIENT_SECRET');
         $this->access_token = $this->getAccessToken();
-        $this->environment = env('BC_ENVIRONMENT');
+        $this->environment = env('SALESFORCE_ENVIRONMENT');
+        $this->login_url = "https://login.salesforce.com/services/oauth2/token";
     }
-    public function postPaymentData($data)
+    public function postCourseData($data)
     {
-        $company_id = $this->company_id;
+
         $environment = $this->environment;
-        $request_url = "https://api.businesscentral.dynamics.com/v2.0/$environment/ODataV4/PostPaymentSaleData?Company=$company_id"; #Dynamics URL for posting Data for payments and User details
+        $request_url = $this->getSalesForceInstanceUrl()."/services/data/v60.0/sobjects/Order"; #SalesForce URL for posting Data for payments and User details(Replace with custom URL For Creating Order)
         return $this->postRequest($request_url, $data);
     }
 
@@ -75,11 +75,10 @@ class MicrosoftDynamicsService
 
         // Check for errors and Log them
         if (curl_errno($ch)) {
-            info('Microsoft Dymanics Post Data cURL error: ' . curl_error($ch));
+            info('SalesForce Post Data cURL error: ' . curl_error($ch));
         } else {
             // Handle the response as needed
-          info('Microsoft Dynamics Post Data Response: ') . $response;
-            //Send Status Email Based on Status Code on Data Saved
+            info('SalesForce Post Data Response: ') . $response;
 
         }
         // Close the cURL session
@@ -92,47 +91,63 @@ class MicrosoftDynamicsService
 
     public function getAccessToken()
     {
-        return $this->generateBearerTokenBusinessCentral();
+        $data_string = "access_token";
+        return $this->authInstanceData($data_string);
     }
 
-    private function generateBearerTokenBusinessCentral()
+    private function getSalesForceInstanceUrl()
+    {
+        $data_string = "instance_url";
+        return $this->authInstanceData($data_string);
+    }
+
+    private function authInstanceData($data_string)
     {
         // ------------------------PARAMETERS----------------------------------------
-        $tenant_id = $this->tenant_id;
         $client_id = $this->client_id;
         $client_secret = $this->client_secret;
 
-        $tokenUrl = "https://login.microsoftonline.com/$tenant_id/oauth2/v2.0/token";
+        $tokenUrl = $this->login_url;
 
         $data = array(
-            'client_id' => $client_id,
-            'scope' => 'https://api.businesscentral.dynamics.com/.default',
-            'client_secret' => $client_secret,
             'grant_type' => 'client_credentials',
+            'client_id' => $client_id,
+            'client_secret' => $client_secret
         );
 
+        // Initialize cURL
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $tokenUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        // Set cURL options
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $tokenUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/x-www-form-urlencoded'
+            )
+        ));
 
+        // Execute the request
         $response = curl_exec($ch);
 
+        // Check for errors
         if ($response === false) {
-            info('cURL Error: ' . curl_error($ch));
-        }
-
-        curl_close($ch);
-
-        $api_response = json_decode($response, true);
-
-        if (isset($api_response['access_token'])) {
-            // Handle $api_response
-            return $api_response['access_token'];
+            echo 'cURL Error: ' . curl_error($ch);
         } else {
-            return false;
+            // Handle the response as needed
+            $api_response = json_decode($response, true);
+
+            if (isset($api_response[$data_string])) {
+                // Handle $api_response
+                return $api_response[$data_string];
+            } else {
+                return false;
+            }
         }
+
+        // Close the cURL session
+        curl_close($ch);
     }
 }
