@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseUser;
 use App\Services\MpesaService;
+use App\Services\NotificationService;
 use App\Services\SalesforceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +80,12 @@ class CourseController extends Controller
             DB::rollBack();
             //Log Errors In saving Data
             info("Error Saving Course Data: ".$th->getMessage());
+            // Send Notification To Admins On Failure
+            $notificationService = new NotificationService();
+            $subject = "Saving Data Error";
+            $message = "Error Saving Data: ".$th->getMessage();
+            $notificationService->sendAdminErrorLog($subject,$message);
+            return redirect()->route('courses.show', $course->id)->with('error', 'Failed to enroll to ' . $course->name);
         }
 
 

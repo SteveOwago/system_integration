@@ -22,7 +22,7 @@ class MpesaService
             if (env("MPESA_ENVIRONMENT") == 'live') {
                 $environment = 'api';
             }
-            if($environment == "sandbox"){
+            if ($environment == "sandbox") {
                 $amountPay = 1;
             }
 
@@ -62,7 +62,7 @@ class MpesaService
                 'CallBackURL'            => route('courses.stk.callback.43054384'),
                 //'CallBackURL'            => "https://takemyitclass.com",
                 'AccountReference'       => 'Moringa School Course Enrollment',
-                'TransactionDesc'        => 'Payment For Enrollment: '.$course->name
+                'TransactionDesc'        => 'Payment For Enrollment: ' . $course->name
 
             ];
             $data_string = json_encode($curl_post_data);
@@ -86,8 +86,14 @@ class MpesaService
 
             return back()->with('success', 'Please Complete Transaction In the Phone Number Provided');
         } catch (\Throwable $th) {
+            //Log Error
             info($th->getMessage());
-            return back()->with('error', 'Failed! Try Again After 5 minutes or Contact the School for help' );
+            //Send error Notification to Admin
+            $notificationService = new NotificationService();
+            $subject = "Mpesa Payment Failure";
+            $message = "Stk Push Error : " . $th->getMessage();
+            $notificationService->sendAdminErrorLog($subject, $message);
+            return back()->with('error', 'Failed! Try Again After 5 minutes or Contact the School for help. An Automated Email is sent to the Admin');
         }
     }
 }

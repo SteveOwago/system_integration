@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>All Members</h6>
+                    <h6>All Courses</h6>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -43,15 +43,15 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">Courses</p>
-                                            <p class="text-xs text-secondary mb-0">{{ $course->designation ?? 'No name' }}
+                                            <p class="text-xs font-weight-bold mb-0">Category</p>
+                                            <p class="text-xs text-secondary mb-0">{{ $course->designation ?? 'IT Course' }}
                                             </p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            <span class="badge badge-sm bg-gradient-success">Online</span>
+                                            <span class="badge badge-sm bg-gradient-success">Price</span>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
+                                            <span class="text-secondary text-xs font-weight-bold">{{ $course->price }}</span>
                                         </td>
                                         <td class="align-middle">
                                             <!-- Button trigger modal -->
